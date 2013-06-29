@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DERPCUBE</title>
+</head>
+<body>
+<div style="position: absolute; left: 50%; top: 50%;"> <!--Page divider to center the canvii-->
+<canvas id = "canvas0" width="500" height="500" style="position: absolute; left: -250px; top: -250px; z-index: 0;"> <!--Each canvas is sized, then given a position based off of the div, z-index selects the layer used-->
+</canvas>
+<canvas id = "canvas1" width="500" height="500" style="position: absolute; left: -250px; top: -250px; z-index: 1;">
+</canvas>
+<canvas id = "canvas2" width="500" height="500" style="position: absolute; left: -250px; top: -250px; z-index: 2;">
+</canvas>
+</div>
+<audio id = "derp" src = "derp.wav" type = "audio/wav"> <!--derp.wav is loaded into an audio tag named derp-->
+</body>
+<script>
+var canvii = new Array(document.getElementById("canvas0"), document.getElementById("canvas1"), document.getElementById("canvas2")) <!--The canvii are placed into an array-->
+var contexts = new Array(canvii[0].getContext("2d"), canvii[1].getContext("2d"), canvii[2].getContext("2d")) <!--Contexts for the canvii are placed into an array-->
+contexts[0].fillStyle="#FF0000" <!--The colors for the type of drawing each canvas uses are set-->
+contexts[1].strokeStyle="#00FF00"
+contexts[1].lineWidth=3; <!--The line thickness for one of the canvii is set-->
+contexts[2].fillStyle="#0000FF"
+
+var xPos = 0; <!--Positioning variables are set to initial values-->
+var yPos = 0;
+var derp=document.getElementById("derp"); <!--derp variable is connected to derp audio tag-->
+function thingLoop(){ <!--Main function is defined-->
+	for(var i = 0; i <= 2; i++){ <!--Canvii are cleared to be drawn on-->
+		contexts[i].clearRect(0,0,500,500)
+	}
+	contexts[0].fillRect(100 + xPos, 100 + yPos, 200,200) <!--Square is drawn on 0th canvas-->
+	contexts[1].beginPath() <!--Line sequence is started on 1st canvas-->
+	contexts[1].moveTo(100 + xPos, 100 + yPos) <!--Draw point is positioned-->
+	contexts[1].lineTo(200 - xPos, 200 - yPos) <!--Line is prepared in the path to be drawn-->
+	contexts[1].stroke() <!--Path is drawn-->
+	contexts[1].beginPath() <!--New line sequence is started so that lines are separated-->
+	contexts[1].moveTo(300 + xPos, 100 + yPos)
+	contexts[1].lineTo(400 - xPos, 200 - yPos)
+	contexts[1].stroke()
+	contexts[1].beginPath()
+	contexts[1].moveTo(100 + xPos, 300 + yPos)
+	contexts[1].lineTo(200 - xPos, 400 - yPos)
+	contexts[1].stroke()
+	contexts[1].beginPath()
+	contexts[1].moveTo(300 + xPos, 300 + yPos)
+	contexts[1].lineTo(400 - xPos, 400 - yPos)
+	contexts[1].stroke()
+	contexts[2].fillRect(200 - xPos, 200 - yPos, 200,200) <!--Square is drawn on the 2nd canvas-->
+	if(yPos == 0){ <!--Positioning logic, this is highly specific to what you're doing-->
+		if(xPos < 100){
+			xPos++
+		}
+		else{
+			yPos++
+		}
+	}
+	else if(yPos == 100){
+		if(xPos > 0){
+			xPos--
+		}
+		else{
+			yPos--
+		}
+	}
+	else if(xPos == 100){
+		yPos++
+	}
+	else{
+		yPos--
+	}
+	if((xPos == 0 || xPos == 100) && (yPos == 0 || yPos == 100)){ <!--Positioning check-->
+		derp.play() <!--Plays derp-->
+	}
+}
+setInterval(function(){thingLoop()}, 1000/60) <!--Runs thingLoop 60 times a second-->
+</script>
+</html>
